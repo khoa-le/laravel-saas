@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('settings/profile', [DashboardController::class, 'profile'])->name('settings.profile');
+    Route::post('settings/profile', [DashboardController::class, 'saveProfile'])->name('settings.profile.save');
+});
+
+require __DIR__ . '/auth.php';
